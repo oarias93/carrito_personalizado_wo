@@ -69,7 +69,7 @@ function mostrar_carrito() {
                 var cart_item_key = $(this).data('cart-item-key');
                 
                 $.ajax({
-                    url: '/wp-admin/admin-ajax.php',
+                    url: '<?php echo admin_url('admin-ajax.php'); ?>',
                     method: 'POST',
                     data: {
                         action: 'eliminar_articulo',
@@ -84,7 +84,7 @@ function mostrar_carrito() {
             // Función para actualizar la cantidad con AJAX
             function actualizarCantidad(cart_item_key, quantity) {
                 $.ajax({
-                    url: '/wp-admin/admin-ajax.php',
+                    url: '<?php echo admin_url('admin-ajax.php'); ?>',
                     method: 'POST',
                     data: {
                         action: 'actualizar_carrito',
