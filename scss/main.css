@@ -22,7 +22,7 @@
     background-color: #333333;
     padding: 20px;
     border-radius: 10px;
-    max-width: 250px;
+    max-width: 380px;
     position: fixed;
     top: 20%;
     right: 0; /* Oculto por defecto */
@@ -34,8 +34,13 @@
     display: block;
     right: 0; /* Mostrar el widget */
   }
+  .widgetCarrito h2 {
+    font-size: 20px;
+    font-weight: bold;
+    color: #ffffff;
+  }
   .toggle-button {
-    position: absolute;
+    position: fixed;
     bottom: 20px;
     right: 20px;
     width: 60px;
@@ -49,5 +54,22 @@
     z-index: 10000;
     font-size: 18px;
     cursor: pointer;
+    animation: animationBoton 1.8s infinite;
+    transition: transform 0.2s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+}
+@keyframes animationBoton {
+  0%, 100% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.03);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+  75% {
+    transform: scale(1.03);
   }
 }/*# sourceMappingURL=main.css.map */
