@@ -6,20 +6,26 @@ Author: Oscar Arias
 */
 
 
+// Funcion para añdir estilos al carrito
+function agregar_estilos_carrito_personalizado() {
+    wp_enqueue_style('carrito-personalizado-css', plugin_dir_url(__FILE__) . '/scss/main.css');
+}
+add_action('wp_enqueue_scripts', 'agregar_estilos_carrito_personalizado');
+
+
 // Función que muestra el carrito en el frontend
 function mostrar_carrito() {
-
 
     $cart = WC()->cart->get_cart();
     $subtotal = WC()->cart->get_cart_total();
     
     ob_start(); ?>
     
-    <div class="widget-carrito">
+    <div class="widgetCarrito">
         <h2>Carrito Personalizado</h2>
-        <ul>
+        <ul class="widgetCarrito__list">
             <?php foreach ($cart as $item) : ?>
-                <li>
+                <li class="widgetCarrito__item">
                     <?php echo $item['data']->get_name(); ?> - 
                     <?php echo wc_price($item['line_total']); ?>
                     <form method="POST" action="">
