@@ -31,5 +31,20 @@
         z-index: 9999;
         transition: left 0.3s ease-in-out;
         display: none;
+        &.show{
+            display: block;
+            right: 0; /* Mostrar el widget */
+        }
+    }
+    .toggle-button {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        background-color: #0073aa;
+        color: white;
+        padding: 10px;
+        border-radius: 50%;
+        cursor: pointer;
+        z-index: 10000;
     }
   }
