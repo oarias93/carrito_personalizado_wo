@@ -1,10 +1,10 @@
 "use strict";
 
 document.addEventListener('DOMContentLoaded', function () {
-  // Toggle del carrito
+  // Mostrar y ocultar el carrito
   document.querySelector('.toggle-button').addEventListener('click', function () {
     document.getElementById('widgetCarrito').classList.toggle('show');
-  }); // Delegación de eventos para los botones
+  }); // Delegación de eventos para los botones de aumentar y disminuir cantidades
 
   document.getElementById('widgetCarrito').addEventListener('click', function (e) {
     var target = e.target;
@@ -12,19 +12,19 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!cartItem) return;
     var itemKey = cartItem.dataset.key;
     var currentQty = parseInt(cartItem.querySelector('.cantidad').textContent);
-    var newQty = currentQty; // Manejar aumento/disminución de cantidad
+    var newQty = currentQty; // Aumentar o disminuir cantidad
 
     if (target.classList.contains('cantidad-boton')) {
       var action = target.dataset.action;
       newQty = action === 'increase' ? currentQty + 1 : Math.max(1, currentQty - 1);
       updateCartItem(itemKey, newQty);
-    } // Manejar eliminación de item
+    } // Eliminar el artículo
 
 
     if (target.classList.contains('eliminar')) {
       updateCartItem(itemKey, 0);
     }
-  }); // Función para actualizar el carrito
+  }); // Función para actualizar el carrito con AJAX
 
   function updateCartItem(key, quantity) {
     var wasVisible, response, cart;
@@ -54,55 +54,63 @@ document.addEventListener('DOMContentLoaded', function () {
 
           case 7:
             cart = _context.sent;
-            refreshCart(cart);
+
+            if (!cart.errors) {
+              _context.next = 11;
+              break;
+            }
+
+            alert("Hubo un error al actualizar el carrito");
+            return _context.abrupt("return");
+
+          case 11:
+            // Refrescamos el carrito con los nuevos datos
+            refreshCart(cart); // Si el widget estaba visible, mantenemos el estado visible
 
             if (wasVisible) {
               document.getElementById('widgetCarrito').classList.add('show');
             }
 
-            _context.next = 15;
+            _context.next = 18;
             break;
 
-          case 12:
-            _context.prev = 12;
-            _context.t0 = _context["catch"](1);
-            console.error('Error:', _context.t0);
-
           case 15:
+            _context.prev = 15;
+            _context.t0 = _context["catch"](1);
+            console.error('Error al actualizar el carrito:', _context.t0);
+
+          case 18:
           case "end":
             return _context.stop();
         }
       }
-    }, null, null, [[1, 12]]);
-  } // Función para refrescar el carrito
+    }, null, null, [[1, 15]]);
+  } // Función para refrescar el carrito en el frontend
 
 
-  function refreshCart() {
-    var response, data, parser, html, newCart;
+  function refreshCart(cart) {
+    var cartList, subtotalElement;
     return regeneratorRuntime.async(function refreshCart$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
-            _context2.next = 2;
-            return regeneratorRuntime.awrap(fetch('/?sections=cart-section'));
+            // Actualizamos los elementos del carrito en el frontend
+            cartList = document.querySelector('.widgetCarrito__list');
+            cartList.innerHTML = ''; // Limpiar los items
 
-          case 2:
-            response = _context2.sent;
-            _context2.next = 5;
-            return regeneratorRuntime.awrap(response.json());
+            cart.items.forEach(function (item) {
+              var li = document.createElement('li');
+              li.classList.add('widgetCarrito__item');
+              li.dataset.key = item.key; // Crear el contenido HTML del carrito con los nuevos datos
+
+              li.innerHTML = "\n              <h3>".concat(item.product.title, "</h3>\n              <span class=\"widgetCarrito__price\">").concat(item.line_price | money, "</span>\n              <div class=\"widgetCarrito__cantidad\">\n                  <button class=\"cantidad-boton\" data-action=\"decrease\">-</button>\n                  <span class=\"cantidad\">").concat(item.quantity, "</span>\n                  <button class=\"cantidad-boton\" data-action=\"increase\">+</button>\n              </div>\n              <button class=\"eliminar\">Eliminar</button>\n          ");
+              cartList.appendChild(li);
+            }); // Actualizar el subtotal
+
+            subtotalElement = document.querySelector('.widgetCarrito__subtotal');
+            subtotalElement.textContent = "Subtotal: ".concat(cart.total_price | money);
 
           case 5:
-            data = _context2.sent;
-            // Shopify 2.0+ usa sections para actualizaciónes AJAX
-            parser = new DOMParser();
-            html = parser.parseFromString(data['cart-section'], 'text/html');
-            newCart = html.querySelector('#widgetCarrito');
-
-            if (newCart) {
-              document.getElementById('widgetCarrito').outerHTML = newCart.outerHTML;
-            }
-
-          case 10:
           case "end":
             return _context2.stop();
         }
