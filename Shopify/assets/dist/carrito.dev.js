@@ -1,40 +1,87 @@
 "use strict";
 
 document.addEventListener('DOMContentLoaded', function () {
-  // Mostrar y ocultar el carrito
-  document.querySelector('.toggle-button').addEventListener('click', function () {
-    document.getElementById('widgetCarrito').classList.toggle('show');
-  }); // Delegación de eventos para los botones de aumentar y disminuir cantidades
-
-  document.getElementById('widgetCarrito').addEventListener('click', function (e) {
-    var target = e.target;
-    var cartItem = target.closest('.widgetCarrito__item');
-    if (!cartItem) return;
-    var itemKey = cartItem.dataset.key;
-    var currentQty = parseInt(cartItem.querySelector('.cantidad').textContent);
-    var newQty = currentQty; // Aumentar o disminuir cantidad
-
-    if (target.classList.contains('cantidad-boton')) {
-      var action = target.dataset.action;
-      newQty = action === 'increase' ? currentQty + 1 : Math.max(1, currentQty - 1);
-      updateCartItem(itemKey, newQty);
-    } // Eliminar el artículo
-
-
-    if (target.classList.contains('eliminar')) {
-      updateCartItem(itemKey, 0);
+  // Toggle del carrito
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('.toggle-button')) {
+      document.getElementById('widgetCarrito').classList.toggle('show');
     }
-  }); // Función para actualizar el carrito con AJAX
+  }); // Delegación de eventos para el carrito
 
-  function updateCartItem(key, quantity) {
-    var wasVisible, response, cart;
-    return regeneratorRuntime.async(function updateCartItem$(_context) {
+  document.addEventListener('click', function _callee(e) {
+    var target, cartItem, itemKey, quantityElement, currentQty, newQty, action;
+    return regeneratorRuntime.async(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            wasVisible = document.getElementById('widgetCarrito').classList.contains('show');
-            _context.prev = 1;
-            _context.next = 4;
+            target = e.target;
+            cartItem = target.closest('.widgetCarrito__item');
+
+            if (cartItem) {
+              _context.next = 4;
+              break;
+            }
+
+            return _context.abrupt("return");
+
+          case 4:
+            itemKey = cartItem.dataset.key;
+            quantityElement = cartItem.querySelector('.cantidad');
+            currentQty = parseInt(quantityElement.textContent);
+            newQty = currentQty; // Manejar aumento/disminución de cantidad
+
+            if (!target.classList.contains('cantidad-boton')) {
+              _context.next = 15;
+              break;
+            }
+
+            action = target.dataset.action;
+            newQty = action === 'increase' ? currentQty + 1 : Math.max(1, currentQty - 1); // Actualización inmediata en la UI
+
+            quantityElement.textContent = newQty;
+            _context.next = 14;
+            return regeneratorRuntime.awrap(updateCartItem(itemKey, newQty, cartItem));
+
+          case 14:
+            return _context.abrupt("return");
+
+          case 15:
+            if (!target.classList.contains('eliminar')) {
+              _context.next = 19;
+              break;
+            }
+
+            _context.next = 18;
+            return regeneratorRuntime.awrap(updateCartItem(itemKey, 0, cartItem));
+
+          case 18:
+            cartItem.remove();
+
+          case 19:
+            // Actualizar subtotal después de cualquier cambio
+            updateCartSubtotal();
+
+          case 20:
+          case "end":
+            return _context.stop();
+        }
+      }
+    });
+  }); // Función para formatear moneda (reemplazo de Shopify.formatMoney)
+
+  function formatMoney(cents) {
+    return '$' + (cents / 100).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+  } // Función para actualizar el carrito
+
+
+  function updateCartItem(key, quantity, itemElement) {
+    var response, cart, item;
+    return regeneratorRuntime.async(function updateCartItem$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            _context2.prev = 0;
+            _context2.next = 3;
             return regeneratorRuntime.awrap(fetch('/cart/change.js', {
               method: 'POST',
               headers: {
@@ -47,74 +94,73 @@ document.addEventListener('DOMContentLoaded', function () {
               })
             }));
 
-          case 4:
-            response = _context.sent;
-            _context.next = 7;
+          case 3:
+            response = _context2.sent;
+            _context2.next = 6;
             return regeneratorRuntime.awrap(response.json());
 
-          case 7:
-            cart = _context.sent;
+          case 6:
+            cart = _context2.sent;
 
-            if (!cart.errors) {
-              _context.next = 11;
-              break;
+            // Actualizar precios si no es eliminación
+            if (quantity > 0 && itemElement) {
+              item = cart.items.find(function (i) {
+                return i.key === key;
+              });
+
+              if (item) {
+                itemElement.querySelector('.widgetCarrito__price').textContent = formatMoney(item.line_price);
+              }
             }
 
-            alert("Hubo un error al actualizar el carrito");
-            return _context.abrupt("return");
+            return _context2.abrupt("return", cart);
 
           case 11:
-            // Refrescamos el carrito con los nuevos datos
-            refreshCart(cart); // Si el widget estaba visible, mantenemos el estado visible
-
-            if (wasVisible) {
-              document.getElementById('widgetCarrito').classList.add('show');
-            }
-
-            _context.next = 18;
-            break;
+            _context2.prev = 11;
+            _context2.t0 = _context2["catch"](0);
+            console.error('Error al actualizar carrito:', _context2.t0);
+            throw _context2.t0;
 
           case 15:
-            _context.prev = 15;
-            _context.t0 = _context["catch"](1);
-            console.error('Error al actualizar el carrito:', _context.t0);
-
-          case 18:
-          case "end":
-            return _context.stop();
-        }
-      }
-    }, null, null, [[1, 15]]);
-  } // Función para refrescar el carrito en el frontend
-
-
-  function refreshCart(cart) {
-    var cartList, subtotalElement;
-    return regeneratorRuntime.async(function refreshCart$(_context2) {
-      while (1) {
-        switch (_context2.prev = _context2.next) {
-          case 0:
-            // Actualizamos los elementos del carrito en el frontend
-            cartList = document.querySelector('.widgetCarrito__list');
-            cartList.innerHTML = ''; // Limpiar los items
-
-            cart.items.forEach(function (item) {
-              var li = document.createElement('li');
-              li.classList.add('widgetCarrito__item');
-              li.dataset.key = item.key; // Crear el contenido HTML del carrito con los nuevos datos
-
-              li.innerHTML = "\n              <h3>".concat(item.product.title, "</h3>\n              <span class=\"widgetCarrito__price\">").concat(item.line_price | money, "</span>\n              <div class=\"widgetCarrito__cantidad\">\n                  <button class=\"cantidad-boton\" data-action=\"decrease\">-</button>\n                  <span class=\"cantidad\">").concat(item.quantity, "</span>\n                  <button class=\"cantidad-boton\" data-action=\"increase\">+</button>\n              </div>\n              <button class=\"eliminar\">Eliminar</button>\n          ");
-              cartList.appendChild(li);
-            }); // Actualizar el subtotal
-
-            subtotalElement = document.querySelector('.widgetCarrito__subtotal');
-            subtotalElement.textContent = "Subtotal: ".concat(cart.total_price | money);
-
-          case 5:
           case "end":
             return _context2.stop();
         }
       }
-    });
+    }, null, null, [[0, 11]]);
+  } // Función para actualizar el subtotal
+
+
+  function updateCartSubtotal() {
+    var response, cart;
+    return regeneratorRuntime.async(function updateCartSubtotal$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            _context3.prev = 0;
+            _context3.next = 3;
+            return regeneratorRuntime.awrap(fetch('/cart.js'));
+
+          case 3:
+            response = _context3.sent;
+            _context3.next = 6;
+            return regeneratorRuntime.awrap(response.json());
+
+          case 6:
+            cart = _context3.sent;
+            document.querySelector('.widgetCarrito__subtotal').textContent = "Subtotal: ".concat(formatMoney(cart.total_price));
+            _context3.next = 13;
+            break;
+
+          case 10:
+            _context3.prev = 10;
+            _context3.t0 = _context3["catch"](0);
+            console.error('Error al actualizar subtotal:', _context3.t0);
+
+          case 13:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    }, null, null, [[0, 10]]);
   }
 });
