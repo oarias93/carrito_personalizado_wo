@@ -21,10 +21,11 @@
 
 @media (min-width: #{map-get($breakpoints, 'md')}) {
     .widgetCarrito{
-        background-color: $Dgrey;
+        background-color: $Lgrey;
         padding: 20px;
         border-radius: 10px;
-        max-width: 380px;
+        max-width: 100%;
+        width: 380px;
         position: fixed;
         top: 20%;
         right: 0; /* Oculto por defecto */
@@ -38,7 +39,62 @@
         h2{
             font-size: 20px;
             font-weight: bold;
-            color: $white;
+            color: $Primary2;
+        }
+        &__list{
+            padding: 0;
+        }
+        h3{
+            font-size: 16px;
+            font-weight: bold;
+            color: $Primary2;
+            margin: 0;
+        }
+        &__item{
+            list-style-type: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            border-top: 1px solid #e0e6e9;
+            padding: 20px 0;
+        }
+        &__cantidad{
+            border-radius: 4px;
+            display: flex;
+            margin: 0 0 .25em;
+            width: 100px;
+            border-radius: 4px;
+            display: flex;
+            margin: 0 0 .25em;
+            width: 100px;
+            border: 1px solid #d8dbdd;
+            justify-content: space-between;
+            button{
+                appearance: none;
+                border: none;
+                padding: 0 10px;
+                cursor: pointer;
+                background: #f0e8e8;
+            }
+        }
+        button.eliminar{
+            appearance: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            background: transparent;
+            font-size: 14px;
+            font-weight: 200;
+            color: $Primary2;
+            text-align: left;
+        }
+        &__subtotal{
+            font-size: 20px;
+            font-weight: bold;
+            color: $Primary2;
+            padding-top: 20px;
+            margin: 0;
+            border-top: 2px solid $Primary2;;
         }
     }
     .toggle-button {
