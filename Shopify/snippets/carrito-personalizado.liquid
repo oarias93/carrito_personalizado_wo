@@ -1,0 +1,16 @@
+<div class="cart-widget">
+    <button class="toggle-button">+</button> <!-- Botón para abrir el carrito -->
+
+    <div class="cart-content">
+        <ul class="cart-items">
+            {% for item in cart.items %}
+                <li data-cart-item-key="{{ item.key }}">
+                    <span>{{ item.quantity }} x {{ item.product.title }}</span>
+                    <span>{{ item.line_price | money }}</span>
+                    <button class="remove-item" data-item-id="{{ item.id }}">Eliminar</button>
+                </li>
+            {% endfor %}
+        </ul>
+        <p class="cart-subtotal">Subtotal: {{ cart.total_price | money }}</p>
+    </div>
+</div>
