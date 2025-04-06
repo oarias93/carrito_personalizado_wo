@@ -1,16 +1,17 @@
-<div class="cart-widget">
-    <button class="toggle-button">+</button> <!-- Botón para abrir el carrito -->
-
-    <div class="cart-content">
-        <ul class="cart-items">
-            {% for item in cart.items %}
-                <li data-cart-item-key="{{ item.key }}">
-                    <span>{{ item.quantity }} x {{ item.product.title }}</span>
-                    <span>{{ item.line_price | money }}</span>
-                    <button class="remove-item" data-item-id="{{ item.id }}">Eliminar</button>
-                </li>
-            {% endfor %}
-        </ul>
-        <p class="cart-subtotal">Subtotal: {{ cart.total_price | money }}</p>
+<div id="widgetCarrito" class="widgetCarrito {% if cart.item_count > 0 %}has-items{% endif %}">
+    <h2>Tu Carrito Personalizado</h2>
+    <div class="cart-items">
+      {% for item in cart.items %}
+        <div class="cart-item" data-key="{{ item.key }}">
+          <p>{{ item.product.title }} - {{ item.line_price | money }}</p>
+          <div class="quantity-controls">
+            <button class="quantity-btn" data-action="decrease">-</button>
+            <span class="quantity">{{ item.quantity }}</span>
+            <button class="quantity-btn" data-action="increase">+</button>
+          </div>
+          <button class="remove-item">Eliminar</button>
+        </div>
+      {% endfor %}
     </div>
+    <p class="cart-subtotal">Subtotal: {{ cart.total_price | money }}</p>
 </div>
