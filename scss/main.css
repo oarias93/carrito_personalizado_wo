@@ -19,10 +19,11 @@
 
 @media (min-width: 768px) {
   .widgetCarrito {
-    background-color: #333333;
+    background-color: #f6f7f8;
     padding: 20px;
     border-radius: 10px;
-    max-width: 380px;
+    max-width: 100%;
+    width: 380px;
     position: fixed;
     top: 20%;
     right: 0; /* Oculto por defecto */
@@ -37,7 +38,62 @@
   .widgetCarrito h2 {
     font-size: 20px;
     font-weight: bold;
-    color: #ffffff;
+    color: #003c82;
+  }
+  .widgetCarrito__list {
+    padding: 0;
+  }
+  .widgetCarrito h3 {
+    font-size: 16px;
+    font-weight: bold;
+    color: #003c82;
+    margin: 0;
+  }
+  .widgetCarrito__item {
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border-top: 1px solid #e0e6e9;
+    padding: 20px 0;
+  }
+  .widgetCarrito__cantidad {
+    border-radius: 4px;
+    display: flex;
+    margin: 0 0 0.25em;
+    width: 100px;
+    border-radius: 4px;
+    display: flex;
+    margin: 0 0 0.25em;
+    width: 100px;
+    border: 1px solid #d8dbdd;
+    justify-content: space-between;
+  }
+  .widgetCarrito__cantidad button {
+    appearance: none;
+    border: none;
+    padding: 0 10px;
+    cursor: pointer;
+    background: #f0e8e8;
+  }
+  .widgetCarrito button.eliminar {
+    appearance: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    background: transparent;
+    font-size: 14px;
+    font-weight: 200;
+    color: #003c82;
+    text-align: left;
+  }
+  .widgetCarrito__subtotal {
+    font-size: 20px;
+    font-weight: bold;
+    color: #003c82;
+    padding-top: 20px;
+    margin: 0;
+    border-top: 2px solid #003c82;
   }
   .toggle-button {
     position: fixed;

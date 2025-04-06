@@ -22,24 +22,25 @@ function mostrar_carrito() {
 
     <!-- HTML para el widget del carrito -->
     <div class="widgetCarrito">
-        <h2>Carrito PERSONALIZADO</h2>
+        <h2>Carrito Coordinadora</h2>
         <ul class="widgetCarrito__list">
             <?php foreach ($cart as $item) : ?>
-                <li data-cart-item-key="<?php echo $item['key']; ?>">
-                    <?php echo $item['data']->get_name(); ?> - 
-                    <?php echo wc_price($item['line_total']); ?>
+                <li data-cart-item-key="<?php echo $item['key']; ?>" class="widgetCarrito__item">
+                    <h3><?php echo $item['data']->get_name(); ?></h3>
+                    <span class="widgetCarrito__price""><?php echo wc_price($item['line_total']); ?></span>
                     
                     <!-- Botones para aumentar y disminuir cantidades -->
-                    <button class="cantidad-boton" data-action="decrement" data-item-key="<?php echo $item['key']; ?>">-</button>
-                    <span class="cantidad"><?php echo $item['quantity']; ?></span>
-                    <button class="cantidad-boton" data-action="increment" data-item-key="<?php echo $item['key']; ?>">+</button>
-                    
+                     <div class="widgetCarrito__cantidad">
+                        <button class="cantidad-boton" data-action="decrement" data-item-key="<?php echo $item['key']; ?>">-</button>
+                        <span class="cantidad"><?php echo $item['quantity']; ?></span>
+                        <button class="cantidad-boton" data-action="increment" data-item-key="<?php echo $item['key']; ?>">+</button>
+                    </div>
                     <!-- Botón para eliminar artículo -->
-                    <button class="eliminar" data-cart-item-key="<?php echo $item['key']; ?>">Eliminar</button>
+                    <button class="eliminar" data-cart-item-key="<?php echo $item['key']; ?>">Eliminar producto</button>
                 </li>
             <?php endforeach; ?>
         </ul>
-        <p>Subtotal: <span class="subtotal"><?php echo $subtotal; ?></span></p>
+        <p class="widgetCarrito__subtotal">Subtotal: <span class="subtotal"><?php echo $subtotal; ?></span></p>
     </div>
     <!-- HTML Botón tipo sticky para mostrar el widget -->
     <div class="toggle-button">
@@ -127,8 +128,6 @@ function mostrar_carrito() {
             // Mostrar/Ocultar el carrito cuando se haga clic en el botón flotante
             $(document).on('click', '.toggle-button', function() {
                 $('.widgetCarrito').toggleClass('show');
-                // Cambiar el texto del botón según el estado
-                $(this).text($('.widgetCarrito').hasClass('show') ? '-' : '+');
             });
         });
     </script>
@@ -145,23 +144,24 @@ function generar_html_carrito() {
     ob_start();
     ?>
     <div class="widgetCarrito">
-        <div class="toggle-button">+</div>
-        <h2>Carrito PERSONALIZADO</h2>
+        <h2>Carrito Coordinadora</h2>
         <ul class="widgetCarrito__list">
             <?php
             $cart = WC()->cart->get_cart();
             foreach ($cart as $item_key => $item) : ?>
-                <li data-cart-item-key="<?php echo $item_key; ?>">
-                    <?php echo $item['data']->get_name(); ?> - 
-                    <?php echo wc_price($item['line_total']); ?>
-                    <button class="cantidad-boton" data-action="decrement" data-item-key="<?php echo $item_key; ?>">-</button>
-                    <span class="cantidad"><?php echo $item['quantity']; ?></span>
-                    <button class="cantidad-boton" data-action="increment" data-item-key="<?php echo $item_key; ?>">+</button>
-                    <button class="eliminar" data-cart-item-key="<?php echo $item_key; ?>">Eliminar</button>
+                <li data-cart-item-key="<?php echo $item_key; ?>" class="widgetCarrito__item">
+                    <h3><?php echo $item['data']->get_name(); ?></h3>
+                    <span class="widgetCarrito__price""><?php echo wc_price($item['line_total']); ?></span>
+                    <div class="widgetCarrito__cantidad">
+                        <button class="cantidad-boton" data-action="decrement" data-item-key="<?php echo $item_key; ?>">-</button>
+                        <span class="cantidad"><?php echo $item['quantity']; ?></span>
+                        <button class="cantidad-boton" data-action="increment" data-item-key="<?php echo $item_key; ?>">+</button>
+                    </div>
+                    <button class="eliminar" data-cart-item-key="<?php echo $item_key; ?>">Eliminar producto</button>
                 </li>
             <?php endforeach; ?>
         </ul>
-        <p>Subtotal: <span class="subtotal"><?php echo WC()->cart->get_cart_total(); ?></span></p>
+        <p class="widgetCarrito__subtotal">Subtotal: <span class="subtotal"><?php echo WC()->cart->get_cart_total(); ?></span></p>
     </div>
     <?php
     return ob_get_clean();
