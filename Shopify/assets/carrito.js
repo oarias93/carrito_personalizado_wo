@@ -34,12 +34,9 @@ document.addEventListener('DOMContentLoaded', function() {
           await updateCartItem(itemKey, 0, cartItem);
           cartItem.remove();
       }
-      
-      // Actualizar subtotal después de cualquier cambio
-      updateCartSubtotal();
   });
 
-  // Función para formatear moneda (reemplazo de Shopify.formatMoney)
+  // Función para formatear moneda
   function formatMoney(cents) {
       return '$' + (cents / 100).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
   }
@@ -62,13 +59,17 @@ document.addEventListener('DOMContentLoaded', function() {
           
           const cart = await response.json();
           
-          // Actualizar precios si no es eliminación
+          // Actualizar precio del item si no es eliminación
           if (quantity > 0 && itemElement) {
               const item = cart.items.find(i => i.key === key);
               if (item) {
-                  itemElement.querySelector('.widgetCarrito__price').textContent = formatMoney(item.line_price);
+                  const priceElement = itemElement.querySelector('.widgetCarrito__price');
+                  priceElement.textContent = formatMoney(item.line_price);
               }
           }
+          
+          // Actualizar subtotal siempre
+          updateSubtotalFromCart(cart);
           
           return cart;
       } catch (error) {
@@ -77,12 +78,17 @@ document.addEventListener('DOMContentLoaded', function() {
       }
   }
 
-  // Función para actualizar el subtotal
+  // Función para actualizar subtotal desde objeto cart
+  function updateSubtotalFromCart(cart) {
+      document.querySelector('.widgetCarrito__subtotal').textContent = `Subtotal: ${formatMoney(cart.total_price)}`;
+  }
+
+  // Función para actualizar el subtotal (alternativa)
   async function updateCartSubtotal() {
       try {
           const response = await fetch('/cart.js');
           const cart = await response.json();
-          document.querySelector('.widgetCarrito__subtotal').textContent = `Subtotal: ${formatMoney(cart.total_price)}`;
+          updateSubtotalFromCart(cart);
       } catch (error) {
           console.error('Error al actualizar subtotal:', error);
       }

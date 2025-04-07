@@ -58,16 +58,12 @@ document.addEventListener('DOMContentLoaded', function () {
             cartItem.remove();
 
           case 19:
-            // Actualizar subtotal después de cualquier cambio
-            updateCartSubtotal();
-
-          case 20:
           case "end":
             return _context.stop();
         }
       }
     });
-  }); // Función para formatear moneda (reemplazo de Shopify.formatMoney)
+  }); // Función para formatear moneda
 
   function formatMoney(cents) {
     return '$' + (cents / 100).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
@@ -75,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
   function updateCartItem(key, quantity, itemElement) {
-    var response, cart, item;
+    var response, cart, item, priceElement;
     return regeneratorRuntime.async(function updateCartItem$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
@@ -102,32 +98,40 @@ document.addEventListener('DOMContentLoaded', function () {
           case 6:
             cart = _context2.sent;
 
-            // Actualizar precios si no es eliminación
+            // Actualizar precio del item si no es eliminación
             if (quantity > 0 && itemElement) {
               item = cart.items.find(function (i) {
                 return i.key === key;
               });
 
               if (item) {
-                itemElement.querySelector('.widgetCarrito__price').textContent = formatMoney(item.line_price);
+                priceElement = itemElement.querySelector('.widgetCarrito__price');
+                priceElement.textContent = formatMoney(item.line_price);
               }
-            }
+            } // Actualizar subtotal siempre
 
+
+            updateSubtotalFromCart(cart);
             return _context2.abrupt("return", cart);
 
-          case 11:
-            _context2.prev = 11;
+          case 12:
+            _context2.prev = 12;
             _context2.t0 = _context2["catch"](0);
             console.error('Error al actualizar carrito:', _context2.t0);
             throw _context2.t0;
 
-          case 15:
+          case 16:
           case "end":
             return _context2.stop();
         }
       }
-    }, null, null, [[0, 11]]);
-  } // Función para actualizar el subtotal
+    }, null, null, [[0, 12]]);
+  } // Función para actualizar subtotal desde objeto cart
+
+
+  function updateSubtotalFromCart(cart) {
+    document.querySelector('.widgetCarrito__subtotal').textContent = "Subtotal: ".concat(formatMoney(cart.total_price));
+  } // Función para actualizar el subtotal (alternativa)
 
 
   function updateCartSubtotal() {
@@ -147,7 +151,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
           case 6:
             cart = _context3.sent;
-            document.querySelector('.widgetCarrito__subtotal').textContent = "Subtotal: ".concat(formatMoney(cart.total_price));
+            updateSubtotalFromCart(cart);
             _context3.next = 13;
             break;
 
