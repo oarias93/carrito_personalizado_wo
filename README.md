@@ -12,7 +12,7 @@
 // 2. Instalación
 
 
-- Descargar el archivo del plugin desde el repositorio de GitHub. https://github.com/- Descarga el archivo del plugin desde el repositorio de GitHub: https://github.com/oarias93/carrito_personalizado_wo/.
+- Descarga el archivo del plugin desde el repositorio de GitHub: https://github.com/oarias93/carrito_personalizado_wo/.
 - Descomprime el archivo descargado.
 - Accede al directorio wp-content/plugins/ en la instalación de WordPress.
 - Crea una carpeta con un nombre descriptivo, por ejemplo, carrito-personalizado dentro de wp-content/plugins/.
