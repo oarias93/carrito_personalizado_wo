@@ -1,3 +1,27 @@
+***PREGUNTAS TECNICAS***
+1. Node.js y Next:
+Para crear una API REST con Nest.js y MongoDB, primero instalo Nest y las dependencias de MongoDB (Mongoose). Luego defino un esquema para los datos y finalmente creo un servicio que maneje las operaciones (crear, leer, actualizar, etc...), configuro las rutas que interactúan con el servicio. Finalmente, conecto todo en el archivo app.module.ts y pruebo la API. ¡Eso es básicamente el flujo!
+
+2. React y Next.js:
+Server Side Rendering, la página se genera forma dinámica en el servidor cada vez que un usuario hace una solicitud. Cuando el navegador hace una petición, el servidor ejecuta el código, obtiene los datos y genera la UI, entregándola al usuario. Esto es útil cuando el objetivo es trabajar datos o información dinámica
+
+Static Site Generation genera las páginas en el momento de la compilación. Cuando despliegas el sitio, todas las páginas se generan y se almacenan como archivos estáticos esto hace que mejora el rendimiento. SSG es ideal para sitios con contenido estático o que no cambia con frecuencia, como blogs, documentación o portafolios.
+
+SSR es mejor cuando los datos cambian constantemente o dependen del usuario, por ejemplo un ecommerce donde los productos y los precios cambian constantemente.
+
+SSG es ideal cuando el contenido no cambia frecuentemente y se necesita un buen rendimiento, como sitios web corporativos de información estática o blogs.
+
+3. PHP y .NET:
+
+En PHP, el manejo de autenticación suele realizarse a través de sesiones. Una de las herramientas más comunes es JWT (JSON Web Tokens) para la autenticación. Se hace uso de librerías como PHP-JWT para crear y verificar tokens.
+
+En .NET Core, la autenticación se maneja de manera más robusta a través de Identity Framework, que nos brinda un sistema robusto de autenticación y autorización. Por ejemplo ASP.NET Core Identity facilita el manejo de usuarios, roles y contraseñas. 
+
+En resumen, en PHP gestionamos la autenticación con librerías externas como JWT o herramientas propias de frameworks como laravel, mientras que en .NET Core es un proceso más integrado con ASP.NET Identity que ofrece más funcionalidades y bondades.
+
+
+
+
 ***PLUGIN WORDPRESS**
 
 // 1. Requisitos
