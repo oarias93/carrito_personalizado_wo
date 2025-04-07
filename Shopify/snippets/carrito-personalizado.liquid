@@ -150,3 +150,16 @@
     }
 }
 </style>
+<script>
+// Función de formato de dinero alternativa
+function formatMoney(cents) {
+    return '$' + (cents / 100).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+}
+
+// Inicialización del carrito al cargar
+fetch('/cart.js')
+    .then(response => response.json())
+    .then(cart => {
+        document.querySelector('.widgetCarrito__subtotal').textContent = `Subtotal: ${formatMoney(cart.total_price)}`;
+    });
+</script>
