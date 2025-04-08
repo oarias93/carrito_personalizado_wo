@@ -118,3 +118,10 @@ Eliminar artículos: El usuario puede eliminar productos del carrito sin necesid
 Interacción en tiempo real: El carrito se actualiza dinámicamente, sin recargar la página.
 
 Responsivo: El widget se adapta al tamaño de la pantalla y es accesible en dispositivos móviles.
+
+
+
+VIDEO YOUTUBE WORDPRESS
+
+https://youtu.be/yVZVHy-riFw
+https://youtu.be/lSnY2DNN55w
